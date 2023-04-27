@@ -1,3 +1,20 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PDF to Excel Converter</title>
+  </head>
+  <body>
+    <h1>PDF to Excel Converter</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+      <input type="file" name="pdf_files" accept=".pdf" multiple />
+      <br />
+      <input type="submit" value="Upload and Convert" />
+    </form>
+  </body>
+</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,6 +26,14 @@
     <h1>PDF to Excel Converter</h1>
     <form action="/" method="post" enctype="multipart/form-data">
       <input type="file" name="pdf_files" accept=".pdf" multiple />
+      <br />
+      <label for="apartment_format">Apartment format:</label>
+      <select name="apartment_format" required>
+        <option value="A (\d+)">A (number)</option>
+        <option value="AS (\d+)">AS (number)</option>
+        <option value="ASUNTO (\d+)">ASUNTO (number)</option>
+        <!-- Add more apartment formats here if needed -->
+      </select>
       <br />
       <input type="submit" value="Upload and Convert" />
     </form>
