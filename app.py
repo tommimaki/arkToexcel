@@ -13,31 +13,6 @@ from werkzeug.utils import secure_filename
 import uuid
 
 
-# def extract_text_from_pdf(pdf_path):
-#     with pdfplumber.open(pdf_path) as pdf:
-#         text = ""
-#         for page in pdf.pages:
-#             # Extract selectable text from the current page
-#             page_text = page.extract_text()
-#             if page_text:
-#                 text += page_text + "\n"
-
-#             # Convert the page to an image and extract text using OCR with Tesseract
-#             #  needs resolution fix prolly
-#             img = page.to_image(resolution=400)
-
-#             # Convert to black and white to improve OCR accuracy
-#             with tempfile.NamedTemporaryFile(suffix=".png") as temp_img:
-#                 img.save(temp_img.name, format="PNG")
-#                 with Image(filename=temp_img.name) as wand_img:
-#                     wand_img.type = 'bilevel'
-#                     # Save wand image as PNG and open it with PIL
-#                     with tempfile.NamedTemporaryFile(suffix=".png") as pil_temp_img:
-#                         wand_img.save(filename=pil_temp_img.name)
-#                         pil_img = PILImage.open(pil_temp_img.name)
-#                         ocr_text = pytesseract.image_to_string(pil_img)
-#                 text += ocr_text + "\n"
-#     return text
 from PyPDF2 import PdfReader
 
 
@@ -92,38 +67,6 @@ def extract_text_from_pdf(pdf_path):
 
 # Function to extract relevant data from the text using regular expressions
 
-
-# def extract_data(text, apartment_pattern):
-#     buildings_data = {}
-
-#     building_keyword_pattern = "|".join(building_keywords)
-#     # floor_keyword_pattern = "|".join(floor_keywords)
-#     floor_keyword_pattern = r"(\d+)(?:\s*\.?\s*|\.)(?:" + \
-#         "|".join(floor_keywords) + ")"
-#     # apartment_keyword_pattern = "|".join(apartment_keywords)
-#     apartment_keyword_pattern = apartment_pattern
-
-#     building_matches = re.findall(
-#         fr"(?:{building_keyword_pattern})\s+(\w+)", text)
-
-#     for building in building_matches:
-#         if building not in buildings_data:
-#             buildings_data[building] = {}
-
-#         floor_matches = re.finditer(floor_keyword_pattern, text)
-#         for floor_match in floor_matches:
-#             floor = floor_match.group(1)
-
-#             if floor not in buildings_data[building]:
-#                 # initialize with an empty set
-#                 buildings_data[building][floor] = set()
-
-#             apartment_matches = re.findall(
-#                 fr"(?:{apartment_keyword_pattern})", text)
-#             for apartment in apartment_matches:
-#                 buildings_data[building][floor].add(apartment)
-
-#     return buildings_data
 
 def extract_data(text, apartment_pattern):
     buildings_data = {}
@@ -273,53 +216,3 @@ def index():
 # ... the rest of the app.py code
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-# def extract_data(text):
-#     buildings_data = {}
-#     # Update the regex pattern to capture variations in floor and apartment names
-#     building_floor_pairs = re.findall(
-#         r"RAKENNUS\s+(\w+),\s+((?:\d+\.\s+)?(?:KERROS|VESIKATTO|AS \d+))", text)
-
-#     for building, floor in building_floor_pairs:
-#         if building not in buildings_data:
-#             buildings_data[building] = {floor}
-#         else:
-#             buildings_data[building].add(floor)
-
-#     # Convert sets to lists for consistency and sort the floors
-#     for building, floors in buildings_data.items():
-#         buildings_data[building] = sorted(
-#             list(floors), key=lambda x: (x.isdigit() == False, x))
-
-#     return buildings_data
-
-# Function to write the extracted data to an Excel file
-
-# def extract_data(text):
-#     buildings_data = {}
-
-#     building_keyword_pattern = "|".join(building_keywords)
-#     floor_keyword_pattern = "|".join(floor_keywords)
-#     apartment_keyword_pattern = "|".join(aprtment_keywords)
-
-#     building_matches = re.findall(
-#         fr"(?:{building_keyword_pattern})\s+(\w+)", text)
-
-#     for building in building_matches:
-#         if building not in buildings_data:
-#             buildings_data[building] = {}
-
-#         floor_matches = re.findall(
-#             fr"(?:{floor_keyword_pattern})\s+(\w+)", text)
-#         for floor in floor_matches:
-#             if floor not in buildings_data[building]:
-#                 buildings_data[building][floor] = []
-
-#             apartment_matches = re.findall(
-#                 fr"(?:{apartment_keyword_pattern})", text)
-#             for apartment in apartment_matches:
-#                 if apartment not in buildings_data[building][floor]:
-#                     buildings_data[building][floor].append(apartment)
-
-#     return buildings_data
