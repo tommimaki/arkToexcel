@@ -45,10 +45,14 @@ def index():
                 print(text)
                 print("\n" + "=" * 80 + "\n")
 
+                floor_range = request.form.get('floor_range')
+
+                special_floors = request.form.get('special_floors')
+
                 apartment_pattern = request.form.get('apartment_format')
                 print(f"apartmentpattern {apartment_pattern}")
                 building_data = extract_data(
-                    text, apartment_pattern)  # Util function
+                    text, apartment_pattern, floor_range, special_floors)   # Util function
 
                 for building, floors in building_data.items():
                     if building in data:

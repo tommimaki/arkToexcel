@@ -1,6 +1,4 @@
 from keywords import building_keywords, floor_keywords, apartment_keywords, room_keywords
-from flask import Flask, render_template, request, send_file, flash, redirect, url_for
-import os
 import re
 import pdfplumber
 import pytesseract
@@ -9,8 +7,25 @@ from openpyxl import Workbook
 import tempfile
 from PyPDF2 import PdfReader
 from PIL import Image as PILImage
-from werkzeug.utils import secure_filename
-import uuid
+import string
+
+
+# Text preprocessing in a desperate attempt to do some cleanup for the data we get
+
+import string
+
+
+def preprocess_text(text):
+    # Convert text to lowercase
+    text = text.lower()
+
+    # Remove punctuation
+    # text = text.translate(str.maketrans("", "", string.punctuation))
+
+    # Replace multiple whitespaces with a single whitespace
+    # text = re.sub(r'\s+', ' ', text)
+
+    return text
 
 # Function to extract relevant data from the text using regular expressions
 
@@ -22,7 +37,7 @@ def extract_text_from_pdf(pdf_path):
             # Extract selectable text from the current page
             page_text = page.extract_text()
             if page_text:
-                text += page_text + "\n"
+                text += preprocess_text(page_text) + "\n"
 
             # Convert the page to an image and extract text using OCR with Tesseract
             img = page.to_image(resolution=400)
@@ -37,7 +52,7 @@ def extract_text_from_pdf(pdf_path):
                         wand_img.save(filename=pil_temp_img.name)
                         pil_img = PILImage.open(pil_temp_img.name)
                         ocr_text = pytesseract.image_to_string(pil_img)
-                text += ocr_text + "\n"
+                text += preprocess_text(ocr_text) + "\n"
 
         # Extract annotations and form fields using PyPDF2
         with open(pdf_path, "rb") as f:
@@ -48,8 +63,8 @@ def extract_text_from_pdf(pdf_path):
                     for annot in page["/Annots"]:
                         annot_obj = annot.getObject()
                         if "/Contents" in annot_obj:
-                            text += annot_obj["/Contents"].replace(
-                                "\n", " ").strip() + "\n"
+                            text += preprocess_text(annot_obj["/Contents"].replace(
+                                "\n", " ").strip()) + "\n"
 
             acroform = reader.trailer.get("/AcroForm")
             if acroform:
@@ -59,13 +74,17 @@ def extract_text_from_pdf(pdf_path):
                     if "/V" in field_obj:
                         value = field_obj["/V"]
                         if value not in ["", "/Off"]:
-                            text += value.replace("\n", " ").strip() + "\n"
+                            text += preprocess_text(value.replace("\n",
+                                                    " ").strip()) + "\n"
 
     return text
 
 
-def extract_data(text, apartment_pattern):
+def extract_data(text, apartment_pattern, floor_range, special_floors):
     buildings_data = {}
+
+    floor_min, floor_max = map(int, floor_range.split("-"))
+    special_floors = special_floors.split(",")
 
     building_keyword_pattern = "|".join(building_keywords)
     floor_keyword_pattern = r"(\d+)(?:\s*\.?\s*|\.)(?:" + \
@@ -83,6 +102,13 @@ def extract_data(text, apartment_pattern):
         floor_matches = re.finditer(floor_keyword_pattern, text)
         for floor_match in floor_matches:
             floor = floor_match.group(1)
+
+            # Check if the floor is within the range or is a special floor
+            if floor.isdigit():
+                if int(floor) < floor_min or int(floor) > floor_max:
+                    continue
+            elif floor not in special_floors:
+                continue
 
             if floor not in buildings_data[building]:
                 # initialize with an empty set

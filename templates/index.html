@@ -12,11 +12,18 @@
       <br />
       <label for="apartment_format">Apartment format:</label>
       <select name="apartment_format" required>
-        <option value="A (\d+)">A (number)</option>
-        <option value="AS (\d+)">AS (number)</option>
-        <option value="ASUNTO (\d+)">ASUNTO (number)</option>
+        <option value="a (\d+)">A (number)</option>
+        <option value="as (\d+)">AS (number)</option>
+        <option value="asunto (\d+)">ASUNTO (number)</option>
         <!-- Add more apartment formats here if needed -->
       </select>
+      <br />
+      <br />
+      <label for="floor_range">Floor range (e.g., 1-10):</label>
+      <input type="text" name="floor_range" required />
+      <br />
+      <label for="special_floors">Special floor names (comma-separated):</label>
+      <input type="text" name="special_floors" />
       <br />
       <input type="submit" value="Upload and Convert" />
     </form>

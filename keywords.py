@@ -1,7 +1,7 @@
 # keywords.py
-building_keywords = ["RAKENNUS" "RAKENNUS A", "RAKENNUS B", "RAKENNUS C",
-                     "RAKENNUS D", "RAKENNUS E", "TALO", "TALO A", "TALO B", "TALO C", "TALO D", "TALO E"]
-floor_keywords = ["KERROS", "KERROKSET", "KRS", "VESIKATTO", "KELLARI"]
-apartment_keywords = ["AS \d+", "A \d+", "B \d+", "C \d+"]
-room_keywords = ["ET", "AH", "KT", "MH", "OH", "KPH", "KH", "WC", "eteinen", "aula", "keittiö",
-                 "makuuhuone", "olohuone", "kylpyhuone", "wc", "kodinhoitohuone", "vaatehuone", "terassi", "parveke", "PARVEKE"]
+building_keywords = ["rakennus" "rakennus a", "rakennus b", "rakennus c",
+                     "rakennus d", "rakennus E", "talo", "talo a", "talo b", "talo c", "talo d", "talo e"]
+floor_keywords = ["kerros", "kerrokset", "krs", "vesikatto", "kellari"]
+apartment_keywords = ["as \d+", "a \d+", "b \d+", "c \d+"]
+room_keywords = ["et", "ah", "kt", "mh", "oh", "kph", "kh", "wc", "eteinen", "aula", "keittiö",
+                 "makuuhuone", "olohuone", "kylpyhuone", "kodinhoitohuone", "vaatehuone", "terassi", "parveke"]
