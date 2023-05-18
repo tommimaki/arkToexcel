@@ -81,6 +81,5 @@ def index():
     return render_template('index.html')
 
 
-# ... the rest of the app.py code
 if __name__ == '__main__':
     app.run(debug=True)

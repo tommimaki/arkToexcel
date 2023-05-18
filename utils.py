@@ -134,23 +134,22 @@ def write_data_to_excel(data, output_file):
     wb = Workbook()
     ws = wb.active
 
-    headers = ["Building", "Floor", "Apartment", "Room"]
-    for col, header in enumerate(headers, start=1):
-        ws.cell(row=1, column=col).value = header
-
-    row = 2
+    row = 1
     for building, floors in data.items():
-        ws.cell(row=row, column=1).value = building
+        ws.cell(row=row, column=1).value = "Building"
+        ws.cell(row=row, column=2).value = building
         row += 1
         for floor, apartments in floors.items():
+            ws.cell(row=row, column=1).value = "Floor"
             ws.cell(row=row, column=2).value = f"Kerros {floor}"
             row += 1
             for apartment, rooms in apartments.items():
+                ws.cell(row=row, column=1).value = "Apartment"
                 ws.cell(row=row, column=3).value = apartment
                 row += 1
                 for room in rooms.keys():
+                    ws.cell(row=row, column=1).value = "Room"
                     ws.cell(row=row, column=4).value = room
                     row += 1
-            row += 1
 
     wb.save(output_file)
